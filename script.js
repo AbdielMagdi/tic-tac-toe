@@ -1,90 +1,96 @@
-const board = document.getElementById("board");
-const statusText = document.getElementById("status");
-const resetButton = document.getElementById("reset");
-const scoreX = document.getElementById("scoreX");
-const scoreO = document.getElementById("scoreO");
+// DOM hooks
+const boardEl   = document.getElementById("board");
+const statusEl  = document.getElementById("status");
+const resetBtn  = document.getElementById("reset");
+const scoreXEl  = document.getElementById("scoreX");
+const scoreOEl  = document.getElementById("scoreO");
 
-let currentPlayer = "X";
-let gameActive = true;
-let gameState = ["", "", "", "", "", "", "", "", ""];
-let scores = { X: 0, O: 0 };
+// game state
+let cells,           // NodeList of .cell elements
+    state,           // array of 9 strings  ("", "X", or "O")
+    currentPlayer,   // "X" | "O"
+    active;          // game running?
 
-const winPatterns = [
-  [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-  [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-  [0, 4, 8], [2, 4, 6]             // Diagonals
+let scores = {X:0,O:0};
+
+// winning patterns
+const wins = [
+  [0,1,2],[3,4,5],[6,7,8],
+  [0,3,6],[1,4,7],[2,5,8],
+  [0,4,8],[2,4,6]
 ];
 
-// Create grid
-function initBoard() {
-  board.innerHTML = "";
-  gameState = ["", "", "", "", "", "", "", "", ""];
-  gameActive = true;
-  statusText.textContent = `${currentPlayer}'s Move`;
-
-  for (let i = 0; i < 9; i++) {
-    const cell = document.createElement("div");
-    cell.classList.add("cell");
-    cell.dataset.index = i;
-    cell.addEventListener("click", handleClick);
-    board.appendChild(cell);
+/* ----------  initialise / reset board  ---------- */
+function init(){
+  // clear previous grid
+  boardEl.innerHTML="";
+  // create 9 cells
+  for(let i=0;i<9;i++){
+    const cell=document.createElement("div");
+    cell.className="cell";
+    cell.dataset.index=i;
+    cell.addEventListener("click",handleMove);
+    boardEl.appendChild(cell);
   }
+  // cache NodeList after creation
+  cells=document.querySelectorAll(".cell");
+  // set initial state
+  state=Array(9).fill("");
+  currentPlayer="X";
+  active=true;
+  statusEl.textContent="X's Move";
 }
 
-// Handle cell click
-function handleClick(e) {
-  const index = e.target.dataset.index;
+/* ----------  handle a move  ---------- */
+function handleMove(e){
+  const idx=+e.target.dataset.index;
+  if(!active||state[idx]) return;   // ignore if game over or occupied
 
-  if (!gameActive || gameState[index] !== "") return;
+  // mark UI & state
+  state[idx]=currentPlayer;
+  e.target.textContent=currentPlayer;
 
-  gameState[index] = currentPlayer;
-  e.target.textContent = currentPlayer;
-
-  if (checkWin()) {
-    gameActive = false;
+  // check win
+  if(checkWin()){
+    active=false;
     scores[currentPlayer]++;
-    updateScores();
-    setTimeout(() => {
-      alert(`🎉 Player ${currentPlayer} Wins!`);
-      initBoard();
-    }, 100);
+    updateScoreboard();
+    statusEl.textContent=`${currentPlayer} Wins!`;
     return;
   }
 
-  if (!gameState.includes("")) {
-    gameActive = false;
-    setTimeout(() => {
-      alert("It's a draw!");
-      initBoard();
-    }, 100);
+  // check draw
+  if(state.every(c=>c)){
+    active=false;
+    statusEl.textContent="Draw!";
     return;
   }
 
-  currentPlayer = currentPlayer === "X" ? "O" : "X";
-  statusText.textContent = `${currentPlayer}'s Move`;
+  // switch turn
+  currentPlayer=currentPlayer==="X"?"O":"X";
+  statusEl.textContent=`${currentPlayer}'s Move`;
 }
 
-// Check winning condition
-function checkWin() {
-  return winPatterns.some(pattern => {
-    const [a, b, c] = pattern;
-    return gameState[a] && gameState[a] === gameState[b] && gameState[b] === gameState[c];
+/* ----------  detect winning pattern  ---------- */
+function checkWin(){
+  return wins.some(p=>{
+    const [a,b,c]=p;
+    return state[a]&&state[a]===state[b]&&state[a]===state[c];
   });
 }
 
-// Reset scores
-function resetGame() {
-  scores = { X: 0, O: 0 };
-  updateScores();
-  currentPlayer = "X";
-  initBoard();
+/* ----------  update scoreboard  ---------- */
+function updateScoreboard(){
+  scoreXEl.textContent=scores.X;
+  scoreOEl.textContent=scores.O;
 }
 
-// Update score table
-function updateScores() {
-  scoreX.textContent = scores["X"];
-  scoreO.textContent = scores["O"];
-}
+/* ----------  reset button  ---------- */
+resetBtn.addEventListener("click",()=>{
+  scores={X:0,O:0};
+  updateScoreboard();
+  init();
+});
 
-resetButton.addEventListener("click", resetGame);
-initBoard();
+/* ----------  bootstrap  ---------- */
+init();
