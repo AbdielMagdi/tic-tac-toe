@@ -2,24 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tic Tac Toe</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Tic Tac Toe</h1>
-  <div id="game-board"></div>
-  <button id="restart">Restart Game</button>
+  <h1>TIC - TAC - TOE</h1>
+  <div id="turn">X's Move</div>
+  <div class="board" id="board"></div>
 
-  <!-- Congratulations popup -->
-  <div id="popup" class="hidden">
-    <div id="popup-content">
-      <h2 id="popup-message"></h2>
-      <button id="close-popup">Close</button>
-    </div>
+  <div class="score-table">
+    <table>
+      <thead>
+        <tr><th>Player</th><th>Score</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>X</td><td id="scoreX">0</td></tr>
+        <tr><td>O</td><td id="scoreO">0</td></tr>
+      </tbody>
+    </table>
   </div>
 
+  <button id="reset">Reset</button>
   <script src="script.js"></script>
 </body>
 </html>
-
