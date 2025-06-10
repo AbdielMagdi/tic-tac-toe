@@ -3,27 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tic Tac Toe</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Tic - Tac - Toe</title>
+
+  <!-- main stylesheet -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>TIC - TAC - TOE</h1>
-  <div id="turn">X's Move</div>
-  <div class="board" id="board"></div>
 
-  <div class="score-table">
-    <table>
-      <thead>
-        <tr><th>Player</th><th>Score</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>X</td><td id="scoreX">0</td></tr>
-        <tr><td>O</td><td id="scoreO">0</td></tr>
-      </tbody>
-    </table>
+  <!-- status text (whose turn / who won) -->
+  <h2 id="status">X's Move</h2>
+
+  <!-- game + scoreboard wrapper -->
+  <div class="wrapper">
+      <!-- 3×3 board (cells injected by JS) -->
+      <div id="board" class="board"></div>
+
+      <!-- scoreboard -->
+      <table class="score-table">
+        <thead>
+          <tr><th>Player</th><th>Score</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>X</td><td id="scoreX">0</td></tr>
+          <tr><td>O</td><td id="scoreO">0</td></tr>
+        </tbody>
+      </table>
   </div>
 
   <button id="reset">Reset</button>
+
+  <!-- game logic -->
   <script src="script.js"></script>
 </body>
 </html>
