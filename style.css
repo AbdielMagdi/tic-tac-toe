@@ -87,3 +87,40 @@ h2{
   .board{grid-template-columns:repeat(3,90px)}
   .cell{width:90px;height:90px;font-size:2.4rem}
 }
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px 40px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.modal-content button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid #3498db;
+  background: #ecf0f1;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.hidden {
+  display: none;
+}
