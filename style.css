@@ -1,76 +1,89 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  text-align: center;
-  background: linear-gradient(to right, #f2f7ff, #d0eaff);
-  padding: 20px;
+/* ----------  global resets & layout  ---------- */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family: "Segoe UI", sans-serif;
+  text-align:center;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:1.4rem;
+  padding:1.2rem;
+  /* soft blue gradient */
+  background:linear-gradient(135deg,#dae2f8 0%,#d6e4ff 50%,#cfe0ff 100%);
 }
 
-h1 {
-  font-size: 3rem;
-  background: linear-gradient(to right, #2980b9, #8e44ad);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: bold;
-  margin-bottom: 10px;
+/* ----------  headings  ---------- */
+h1{
+  font-size:3rem;
+  letter-spacing:4px;
+  background:linear-gradient(90deg,#304ffe 0%,#8e44ad 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 2px 4px rgba(0,0,0,.15);
+}
+h2{
+  color:#304ffe;
+  font-size:1.4rem;
 }
 
-h2 {
-  font-size: 1.5rem;
-  color: #2980b9;
-  margin-bottom: 20px;
+/* ----------  wrapper to keep board & table together  ---------- */
+.wrapper{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1.6rem;
 }
 
-.board {
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-gap: 10px;
-  justify-content: center;
-  margin-bottom: 20px;
+/* ----------  board grid  ---------- */
+.board{
+  display:grid;
+  grid-template-columns:repeat(3,110px);
+  grid-gap:10px;
 }
-
-.cell {
-  width: 100px;
-  height: 100px;
-  background-color: #f9f9f9;
-  border: 2px solid #333;
-  font-size: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: 0.2s;
+.cell{
+  width:110px;height:110px;
+  background:#fafafa;
+  border:2px solid #333;
+  font-size:3rem;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:background .25s;
 }
+.cell:hover{background:#e8e8e8}
 
-.cell:hover {
-  background-color: #e0e0e0;
+/* ----------  scoreboard  ---------- */
+.score-table{
+  border-collapse:collapse;
+  font-size:1.1rem;
+  min-width:180px;
 }
-
-.score-table {
-  margin: 0 auto 20px;
-  border-collapse: collapse;
-  font-size: 1.2rem;
+.score-table th,
+.score-table td{
+  border:1px solid #333;
+  padding:.35rem 1.2rem;
 }
+.score-table th{background:#a8c7e9}
 
-.score-table th, .score-table td {
-  border: 1px solid #333;
-  padding: 10px 20px;
+/* ----------  reset button  ---------- */
+#reset{
+  padding:.6rem 2.4rem;
+  font-size:1rem;
+  color:#304ffe;
+  background:#e0edff;
+  border:2px solid #304ffe;
+  border-radius:6px;
+  cursor:pointer;
+  transition:background .25s;
 }
+#reset:hover{background:#c7dbff}
 
-.score-table th {
-  background-color: #add8e6;
-}
-
-button#reset {
-  padding: 10px 20px;
-  font-size: 1rem;
-  background-color: #d0eaff;
-  border: 2px solid #2980b9;
-  color: #2980b9;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-button#reset:hover {
-  background-color: #b3daff;
+/* ----------  small-screen tweaks  ---------- */
+@media(max-width:500px){
+  .board{grid-template-columns:repeat(3,90px)}
+  .cell{width:90px;height:90px;font-size:2.4rem}
 }
