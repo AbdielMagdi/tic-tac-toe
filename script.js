@@ -41,35 +41,41 @@ function init(){
   statusEl.textContent="X's Move";
 }
 
-/* ----------  handle a move  ---------- */
 function handleMove(e){
-  const idx=+e.target.dataset.index;
-  if(!active||state[idx]) return;   // ignore if game over or occupied
+  const idx = +e.target.dataset.index;
+  if (!active || state[idx]) return;
 
-  // mark UI & state
-  state[idx]=currentPlayer;
-  e.target.textContent=currentPlayer;
+  // Mark move
+  state[idx] = currentPlayer;
+  e.target.textContent = currentPlayer;
 
-  // check win
-  if(checkWin()){
-    active=false;
+  // Check win
+  if (checkWin()) {
+    active = false;
     scores[currentPlayer]++;
     updateScoreboard();
-    statusEl.textContent=`${currentPlayer} Wins!`;
+    setTimeout(() => {
+      alert(`🎉 ${currentPlayer} Wins!`);
+      init(); // reset board for next round
+    }, 100);
     return;
   }
 
-  // check draw
-  if(state.every(c=>c)){
-    active=false;
-    statusEl.textContent="Draw!";
+  // Check draw
+  if (state.every(c => c)) {
+    active = false;
+    setTimeout(() => {
+      alert("🤝 It's a draw!");
+      init(); // reset board for next round
+    }, 100);
     return;
   }
 
-  // switch turn
-  currentPlayer=currentPlayer==="X"?"O":"X";
-  statusEl.textContent=`${currentPlayer}'s Move`;
+  // Switch player
+  currentPlayer = currentPlayer === "X" ? "O" : "X";
+  statusEl.textContent = `${currentPlayer}'s Move`;
 }
+
 
 /* ----------  detect winning pattern  ---------- */
 function checkWin(){
