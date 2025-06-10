@@ -45,36 +45,27 @@ function handleMove(e){
   const idx = +e.target.dataset.index;
   if (!active || state[idx]) return;
 
-  // Mark move
   state[idx] = currentPlayer;
   e.target.textContent = currentPlayer;
 
-  // Check win
   if (checkWin()) {
     active = false;
     scores[currentPlayer]++;
     updateScoreboard();
-    setTimeout(() => {
-      alert(`🎉 ${currentPlayer} Wins!`);
-      init(); // reset board for next round
-    }, 100);
+    showModal(`🎉 ${currentPlayer} Wins!`);
     return;
   }
 
-  // Check draw
   if (state.every(c => c)) {
     active = false;
-    setTimeout(() => {
-      alert("🤝 It's a draw!");
-      init(); // reset board for next round
-    }, 100);
+    showModal("🤝 It's a draw!");
     return;
   }
 
-  // Switch player
   currentPlayer = currentPlayer === "X" ? "O" : "X";
   statusEl.textContent = `${currentPlayer}'s Move`;
 }
+
 
 
 /* ----------  detect winning pattern  ---------- */
@@ -100,3 +91,16 @@ resetBtn.addEventListener("click",()=>{
 
 /* ----------  bootstrap  ---------- */
 init();
+const modal = document.getElementById("modal");
+const modalMsg = document.getElementById("modal-message");
+const nextBtn = document.getElementById("nextRoundBtn");
+
+function showModal(message) {
+  modalMsg.textContent = message;
+  modal.classList.remove("hidden");
+}
+
+nextBtn.addEventListener("click", () => {
+  modal.classList.add("hidden");
+  init(); // start next round
+});
