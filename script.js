@@ -1,92 +1,90 @@
-const board = document.getElementById('game-board');
-const restartBtn = document.getElementById('restart');
-const popup = document.getElementById('popup');
-const popupMessage = document.getElementById('popup-message');
-const closePopupBtn = document.getElementById('close-popup');
+const board = document.getElementById("board");
+const statusText = document.getElementById("status");
+const resetButton = document.getElementById("reset");
+const scoreX = document.getElementById("scoreX");
+const scoreO = document.getElementById("scoreO");
 
-let currentPlayer = 'X';
-let gameState = Array(9).fill(null);
+let currentPlayer = "X";
 let gameActive = true;
+let gameState = ["", "", "", "", "", "", "", "", ""];
+let scores = { X: 0, O: 0 };
 
-// Winning combos
-const winConditions = [
-  [0,1,2],
-  [3,4,5],
-  [6,7,8],
-  [0,3,6],
-  [1,4,7],
-  [2,5,8],
-  [0,4,8],
-  [2,4,6]
+const winPatterns = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+  [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+  [0, 4, 8], [2, 4, 6]             // Diagonals
 ];
 
-// Create the board dynamically
-function createBoard() {
-  board.innerHTML = '';
-  gameState.fill(null);
+// Create grid
+function initBoard() {
+  board.innerHTML = "";
+  gameState = ["", "", "", "", "", "", "", "", ""];
   gameActive = true;
-  currentPlayer = 'X';
+  statusText.textContent = `${currentPlayer}'s Move`;
 
-  for(let i=0; i<9; i++) {
-    const cell = document.createElement('div');
-    cell.classList.add('cell');
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
     cell.dataset.index = i;
-    cell.addEventListener('click', handleCellClick);
+    cell.addEventListener("click", handleClick);
     board.appendChild(cell);
   }
 }
 
 // Handle cell click
-function handleCellClick(e) {
+function handleClick(e) {
   const index = e.target.dataset.index;
 
-  if (!gameActive || gameState[index]) return; // Ignore if game over or cell taken
+  if (!gameActive || gameState[index] !== "") return;
 
   gameState[index] = currentPlayer;
   e.target.textContent = currentPlayer;
 
   if (checkWin()) {
     gameActive = false;
-    showPopup(`🎉 Player ${currentPlayer} wins!`);
+    scores[currentPlayer]++;
+    updateScores();
+    setTimeout(() => {
+      alert(`🎉 Player ${currentPlayer} Wins!`);
+      initBoard();
+    }, 100);
     return;
   }
 
-  if (gameState.every(cell => cell)) {
+  if (!gameState.includes("")) {
     gameActive = false;
-    showPopup(`🤝 It's a draw!`);
+    setTimeout(() => {
+      alert("It's a draw!");
+      initBoard();
+    }, 100);
     return;
   }
 
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+  currentPlayer = currentPlayer === "X" ? "O" : "X";
+  statusText.textContent = `${currentPlayer}'s Move`;
 }
 
-// Check if current player won
+// Check winning condition
 function checkWin() {
-  return winConditions.some(condition => {
-    return condition.every(i => gameState[i] === currentPlayer);
+  return winPatterns.some(pattern => {
+    const [a, b, c] = pattern;
+    return gameState[a] && gameState[a] === gameState[b] && gameState[b] === gameState[c];
   });
 }
 
-// Show popup message
-function showPopup(message) {
-  popupMessage.textContent = message;
-  popup.classList.remove('hidden');
+// Reset scores
+function resetGame() {
+  scores = { X: 0, O: 0 };
+  updateScores();
+  currentPlayer = "X";
+  initBoard();
 }
 
-// Hide popup
-function hidePopup() {
-  popup.classList.add('hidden');
+// Update score table
+function updateScores() {
+  scoreX.textContent = scores["X"];
+  scoreO.textContent = scores["O"];
 }
 
-// Restart the game
-function restartGame() {
-  hidePopup();
-  createBoard();
-}
-
-// Event listeners
-restartBtn.addEventListener('click', restartGame);
-closePopupBtn.addEventListener('click', hidePopup);
-
-// Initialize
-createBoard();
+resetButton.addEventListener("click", resetGame);
+initBoard();
